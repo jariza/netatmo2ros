@@ -1,0 +1,8 @@
+[user]
+username: WHATEVER
+password: WHATEVER
+client_id: WHATEVER
+client_secret: WHATEVER
+
+[device]
+device_id: WHATEVER
