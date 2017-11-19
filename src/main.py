@@ -104,7 +104,6 @@ def publisher_loop(access_token, device_id):
 
     while not rospy.is_shutdown():
         station_data = get_station_values(access_token, device_id)
-        print station_data
         pub.publish(station_data)
         rospy.sleep(60)
 
