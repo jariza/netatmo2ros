@@ -6,3 +6,15 @@ Value -1 in CO2, noise, pressure or battery_percent means no value.
 rosrun netatmo2ros main.py _configfile:=<config file>
 
 <config file> is the path to the configuration file.
+
+== DOCKER CONTAINER ==
+How to build:
+  Docker container can be build using the files included in this repo:
+  
+  e.g.: docker build -t netatmo2ros .
+
+How to run:
+  The config.ini file must be included in container's volume /config.
+  The hostname of the ROS core must be roscore-server.
+  
+  e.g.: docker run -d --link roscore-server -v /home/configdir:/config netatmo2ros
