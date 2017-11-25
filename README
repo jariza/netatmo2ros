@@ -11,10 +11,13 @@ rosrun netatmo2ros main.py _configfile:=<config file>
 How to build:
   Docker container can be build using the files included in this repo:
   
-  e.g.: docker build -t netatmo2ros .
+  e.g.: docker build -t netatmo2ros:<tagnumber> .
 
 How to run:
   The config.ini file must be included in container's volume /config.
-  The hostname of the ROS core must be roscore-server.
+  The URI of the ROS core is specified in the environment variable ROS_MASTER_URI, the default value is http://roscore-server:11311/.
   
-  e.g.: docker run -d --link roscore-server -v /home/configdir:/config netatmo2ros
+  e.g. (default roscore): docker run -d --link roscore-server -v /home/configdir:/config netatmo2ros:<tagnumber>
+  e.g. (non-default roscore): docker run -d --link roscore-server -e "ROS_MASTER_URI=http://hostname:port/" -v /home/configdir:/config netatmo2ros:<tagnumber>
+  
+  
