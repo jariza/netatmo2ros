@@ -7,4 +7,4 @@ source "/home/catkin_ws/devel/setup.bash"
 
 export ROS_IP=`hostname -I`
 
-rosrun netatmo2ros main.py _configfile:=/config/config.ini
+rosrun netatmo2ros main.py _configpath:=/config/

@@ -4,7 +4,9 @@
     Translates Netatmo Weather Station data to ROS.
     The time between updates is one minute.
     Value -1 in CO2, noise, pressure or battery_percent means no value.
-    This node expect the configuration file to be specified via private parameter configfile.
+    This node expect the configuration path to be specified via private parameter configpath. If the path a file called
+     config.ini, it will be used. If this file is not found, the configuration values will be read from the following
+     files: username, password, client_id, client_secret and device_id.
     Author: José Jaime Ariza (jariza@ieee.org).
     Python version: 2.7
 """
@@ -114,13 +116,32 @@ if __name__ == '__main__':
     rospy.init_node("netatmo2ros", anonymous=False)
 
     # Read configuration
-    config_filename = rospy.get_param("~configfile")
-    if not os.path.isfile(config_filename):
-        sys.exit("Couldn't find configuration file")
-    config = ConfigParser.ConfigParser()
-    config.read(config_filename)
+    config_path = rospy.get_param("~configpath")
+
+    if os.path.isfile(os.path.join(config_path, "config.ini")):
+        # File.ini expected
+        config = ConfigParser.ConfigParser()
+        config.read(os.path.join(config_path, "config.ini"))
+        uname = config.get("user", "username")
+        passw = config.get("user", "password")
+        clientid = config.get("user", "client_id")
+        clientsecret = config.get("user", "client_secret")
+        deviceid = config.get("device", "device_id")
+    elif os.path.isdir(config_path):
+        # Directory with multiple files expected
+        with open(os.path.join(config_path, "username"), "r") as f:
+            uname = f.readline().rstrip()
+        with open(os.path.join(config_path, "password"), "r") as f:
+            passw = f.readline().rstrip()
+        with open(os.path.join(config_path, "client_id"), "r") as f:
+            clientid = f.readline().rstrip()
+        with open(os.path.join(config_path, "client_secret"), "r") as f:
+            clientsecret = f.readline().rstrip()
+        with open(os.path.join(config_path, "device_id"), "r") as f:
+            deviceid = f.readline().rstrip()
+    else:
+        sys.exit("Couldn't find configuration in path {0}.".format(config_path))
 
     # Get token and start loop
-    wd_access_token = get_access_token(config.get("user", "username"), config.get("user", "password"),
-                                       config.get("user", "client_id"), config.get("user", "client_secret"))
-    publisher_loop(wd_access_token, config.get("device", "device_id"))
+    wd_access_token = get_access_token(uname, passw, clientid, clientsecret)
+    publisher_loop(wd_access_token, deviceid)

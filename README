@@ -3,9 +3,11 @@ The time between updates is one minute.
 Value -1 in CO2, noise, pressure or battery_percent means no value.
 
 == USAGE ==
-rosrun netatmo2ros main.py _configfile:=<config file>
+rosrun netatmo2ros main.py _configfile:=<config path>
 
-<config file> is the path to the configuration file.
+<config path> is the path to the configuration file or folder.
+        If the path contains file called config.ini, it will be used.
+        If the path doesn't contain a file called config.ini, configuration values will be read from the following files: username, password, client_id, client_secret and device_id.
 
 == DOCKER CONTAINER ==
 How to build:
@@ -14,7 +16,7 @@ How to build:
   e.g.: docker build -t netatmo2ros:<tagnumber> .
 
 How to run:
-  The config.ini file must be included in container's volume /config.
+  The configguration file must be included in container's volume /config.
   The URI of the ROS core is specified in the environment variable ROS_MASTER_URI, the default value is http://roscore-server:11311/.
   
   e.g. (default roscore): docker run -d --link roscore-server -v /home/configdir:/config netatmo2ros:<tagnumber>
