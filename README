@@ -3,7 +3,7 @@ The time between updates is one minute.
 Value -1 in CO2, noise, pressure or battery_percent means no value.
 
 == USAGE ==
-rosrun netatmo2ros main.py _configfile:=<config path>
+rosrun netatmo2ros main.py _configpath:=<config path>
 
 <config path> is the path to the configuration file or folder.
         If the path contains file called config.ini, it will be used.

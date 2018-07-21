@@ -6,3 +6,5 @@ float32 pressure
 float32 temperature
 int8 link_status
 int8 battery_percent
+int32 last_seen
+int32 time_utc

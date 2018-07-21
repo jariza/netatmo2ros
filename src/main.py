@@ -78,6 +78,8 @@ def get_station_values(access_token, device_id):
     wd.pressure = float(device_data["dashboard_data"]["Pressure"])
     wd.temperature = float(device_data["dashboard_data"]["Temperature"])
     wd.link_status = int(device_data["wifi_status"])
+    wd.last_seen = -1
+    wd.time_utc = long(device_data["dashboard_data"]["time_utc"])
     output.wd.append(wd)
 
     # Populate outdoor modules data
@@ -91,6 +93,8 @@ def get_station_values(access_token, device_id):
         wd.pressure = -1
         wd.temperature = float(module_data["dashboard_data"]["Temperature"])
         wd.link_status = int(module_data["rf_status"])
+        wd.last_seen = long(module_data["last_seen"])
+        wd.time_utc = -1
         output.wd.append(wd)
 
     # Return data
@@ -107,7 +111,7 @@ def publisher_loop(access_token, device_id):
     while not rospy.is_shutdown():
         station_data = get_station_values(access_token, device_id)
         pub.publish(station_data)
-        rospy.sleep(60)
+        rospy.sleep(10)
 
 
 if __name__ == '__main__':
